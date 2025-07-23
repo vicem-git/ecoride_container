@@ -6,7 +6,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='graphics/ecoride-logo.svg') }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% endblock %} - ecoRide</title>
-    <script type="module" src="http://localhost:5173/js/app.js"></script>
+    <script type="module" src="{{ url_for('dist/assets/app-DjPYo8rc.js') }}"></script>
     {% endblock %}
   </head>
   <body class="bg-[var(--color-base)] text-[var(--color-contrast)] font-sans font-semibold flex flex-col items-center">
