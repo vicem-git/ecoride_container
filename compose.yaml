@@ -2,18 +2,16 @@ version: '3.9'
 
 services:
   postgres:
-    image: postgres:latest
+    image: postgis:postgis:17-3.5
     container_name: postgres_db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: ecoride_admin
+      POSTGRES_PASSWORD: secret
       POSTGRES_DB: ecoride_db
-    ports:
-      - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
-      - ./ecoride_flask/app/db_store/db_init.sql:docker-entrypoint-initdb.d/init_db.sql:ro
+      - ./ecoride_flask/app/db_store/db_init.sql:/docker-entrypoint-initdb.d/init_db.sql:ro
 
   python_app:
     build:
@@ -23,27 +21,21 @@ services:
     restart: unless-stopped
     environment:
       - DB_HOST=postgres
-      - DB_USER=postgres
+      - DB_USER=ecoride_admin
       - DB_PORT=5432
-      - DB_PASSWORD=postgres
+      - DB_PASSWORD=secret
       - DB_NAME=ecoride_db
       - FLASK_APP=main.py
-      - FLASK_SECRET_KEY=flask_supersecret
+      - FLASK_SECRET_KEY=secret
       - FLASK_ENV=development
     ports:
       - "5000:5000"
-      - "5173:5173"
     volumes:
       - .:/ecoride_container/
     working_dir: /ecoride_container/ecoride_flask
     depends_on:
       - postgres
-    command: >
-      bash -c "
-      npx @tailwindcss/cli -i app/static/css/styles.css -o app/static/css/tw-output.css --watch &
-      npm run dev &
-      python main.py
-      "
+    command: "python main.py"
 
 volumes:
   db:
