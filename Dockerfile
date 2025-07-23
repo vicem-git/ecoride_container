@@ -7,8 +7,6 @@ WORKDIR /ecoride_container
 
 # python venv
 COPY ./ecoride_flask/requirements.txt ./requirements.txt
-RUN python3 -m venv venv
-ENV PATH="/ecoride_container/venv/bin:$PATH"
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./ecoride_flask ./ecoride_flask
