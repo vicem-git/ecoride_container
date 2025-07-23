@@ -23,6 +23,7 @@ services:
     environment:
       - DB_HOST=postgres
       - DB_USER=postgres
+      - DB_PORT=5432
       - DB_PASSWORD=postgres
       - DB_NAME=ecoride_db
       - FLASK_APP=main.py
