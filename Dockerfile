@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-WORKDIR /ecoride_flask
+WORKDIR /ecoride_container/ecoride_flask
 RUN npm install
 
 # ports
