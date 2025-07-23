@@ -29,30 +29,6 @@ def create_app():
     except Exception as e:
         logging.error(f"failed to load static ids: {str(e)}")
 
-    try:
-        with db_manager.connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute("SELECT COUNT(*) FROM users")
-                user_count = cur.fetchone()[0]
-
-                if user_count < 10:
-                    seed_data(conn, num_drivers=500, num_users=1000, trips_per_driver=5)
-                    logging.info("✅ Database seeded.")
-                else:
-                    logging.info("ℹ️ Seeding skipped: users already exist.")
-
-                cur.execute("SELECT COUNT(*) FROM trip_summaries")
-                summary_count = cur.fetchone()[0]
-
-                if summary_count == 0:
-                    generate_summaries(conn)
-                    logging.info("✅ Trip summaries generated.")
-                else:
-                    logging.info("ℹ️ Trip summaries already exist. Skipping generation.")
-
-    except Exception as e:
-        logging.error(f"❌ Error in DB initialization: {e}")
-
     login_manager.init_app(app)
     session_user_loader(app)
 
