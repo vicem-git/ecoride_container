@@ -1,0 +1,35 @@
+<div id="driver-vehicles" class="p-4 flex flex-col rounded-sm gap-3 bg-[var(--color-base2)] items-center justify-center w-full">
+  <p>VEHICULES</p>
+  {% if driver_info and driver_info.vehicles %}
+    {% set vehicles = driver_info.vehicles %}
+  {% elif vehicles is not defined %}
+    {% set vehicles = [] %}
+  {% endif %}
+
+  {% for v in vehicles %}
+    <div class="border p-4 rounded flex justify-between items-center w-full">
+      <div>
+        <strong>{{ v.brand }} {{ v.model }}</strong> — {{ v.plate_number }}
+      </div>
+      {% if owner %}
+        <button 
+          hx-post="{{ url_for('user.remove_vehicle', vehicle_id=v.id) }}"
+          hx-target="#driver-vehicles"
+          hx-swap="outerHTML"
+          hx-confirm="Are you sure you want to delete this vehicle?"
+          class="text-red-500 text-sm"
+        >✕ Supprimer</button>
+      {% endif %}
+    </div>
+  {% endfor %}
+
+  {% if owner %}
+    <button 
+      hx-get="{{ url_for('user.add_vehicle') }}"
+      hx-target="#driver-vehicles"
+      hx-swap="beforeend"
+      class="p-2 bg-[var(--color-base3)] text-[var(color-base)]"
+    >+ Ajouter un véhicule</button>
+  {% endif %}
+</div>
+

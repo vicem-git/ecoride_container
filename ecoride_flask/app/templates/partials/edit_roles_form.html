@@ -1,0 +1,17 @@
+<form 
+  class="flex flex-col gap-2"
+  hx-post="{{ url_for('user.edit_roles') }}" 
+  hx-target="#roles-container" 
+  hx-swap="innerHTML"
+>
+  {% for role in all_roles %}
+    <label>
+      <input type="checkbox" name="roles" value="{{ role.id }}"
+        {% if role.id in current_roles %}checked{% endif %}>
+      {{ role.name.capitalize() }}
+    </label>
+  {% endfor %}
+  <button type="submit" class="bg-[var(--color-base2) text-[var(--color-base)] rounded-sm">Sauvegarder</button>
+</form>
+
+

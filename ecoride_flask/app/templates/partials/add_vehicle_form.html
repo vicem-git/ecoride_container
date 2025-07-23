@@ -1,0 +1,30 @@
+<form 
+  hx-post="{{ url_for('user.add_vehicle') }}" 
+  hx-target="#driver-vehicles" 
+  hx-swap="innerHTML" 
+  class="space-y-2 bg-[var(--color-base)] p-4 rounded mt-4"
+>
+  <div class="grid grid-cols-2 gap-4">
+    <select name="brand_id" class="input input-sm" required>
+      <option value="">Marque</option>
+      {% for brand in brands %}
+        <option value="{{ brand.id }}">{{ brand.name }}</option>
+      {% endfor %}
+    </select>
+    <input name="model" type="text" placeholder="Modèle" class="input input-sm" required>
+    <input name="plate_number" type="text" placeholder="Plaque d'immatriculation" class="input input-sm" required>
+    <input name="color" type="text" placeholder="Couleur" class="input input-sm">
+    <input name="number_of_seats" type="number" min="1" max="9" placeholder="Places" class="input input-sm">
+    <input name="registration_date" type="date" class="input input-sm">
+    <select name="energy_type_id" class="input input-sm" required>
+      <option value="">Énergie</option>
+      {% for energy in energy_types %}
+        <option value="{{ energy.id }}">{{ energy.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="text-right">
+    <button type="submit" class="btn btn-sm mt-2">Ajouter</button>
+  </div>
+</form>

@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+@import "tailwindcss";
+
+
+.font-open-sans {
+  font-family: "Open Sans", sans-serif;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {  
+  --color-base: oklch(0.9799 0.0093 106.57);
+  --color-base2: oklch(0.9036 0.0093 106.57);
+  --color-base3: oklch(0.7671 0.0093 113.77);
+  --color-base4: oklch(0.5988 0.0093 113.77);
+  --color-contrast: oklch(0.4471 0.0616 148.17);
+  --color-contrast-2: oklch(0.3071 0.0616 148.17);
+  --color-success: oklch(0.822 0.0831 147.34);
+  --color-error: oklch(0.6565 0.1689 24.16);
+
+  --font-sans: "Open Sans", sans-serif;
+}
+
+.dark {
+  --color-base: oklch(0.3561 0.0706 147.88);
+  --color-base2: oklch(0.316 0.0228 192.02);
+  --color-contrast: oklch(0.386 0.0228 192.02);
+  --color-contrast2: oklch(0.4471 0.0616 148.17);
+}
+
+html {
+  font-family: var(--font-sans);
+}
+

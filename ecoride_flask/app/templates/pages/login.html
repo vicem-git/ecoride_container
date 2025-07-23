@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Connexion
+{% endblock %}
+
+{% block main %}
+
+<main id="login-main" class="flex flex-col min-h-screen">
+  <h1 class="text-3xl p-8 mb-24"> Ravi de vous revoir :) </h1>
+  <div id="flash-messages" hx-swap-oob="true">
+    {% include "partials/flash.html" %}
+  </div>
+  <div class="flex flex-col items-center justify-center bg-[var(--color-base)]">
+    <form
+      id="login-form"
+      method="POST"
+      hx-post="{{ url_for('auth.login') }}"
+      hx-swap="innerHTML"
+      hx-trigger="submit"
+      class="flex flex-col items-center"
+    >
+      <div class="text-xl flex flex-col items-center justify-center mb-12 gap-3">
+        <h2 class="mb-8 tracking-wide font-bold">veuillez fournir les détails d'inscription</h2>
+        <input type="email" name="email" placeholder="Email" class="mb-4 p-2 border border-gray-300 rounded" required/>
+        <input type="password" name="password" placeholder="Password" class="mb-4 p-2 border border-gray-300 rounded" required/>
+      </div> 
+      <button type="submit" class="px-4 py-2 rounded-sm bg-[var(--color-base2)] hover:bg-[var(--color-base3)] font-semibold transition-colors duration-300" type="submit">Connexion !</button>
+    </form>
+  </div>
+</main>
+
+{% endblock %}

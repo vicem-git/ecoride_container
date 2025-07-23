@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-app_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  python_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecoride_container
+    restart: unless-stopped
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=${POSTGRES_USER:-postgres}
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - DB_NAME=${POSTGRES_DB:-app_db}
+      - FLASK_APP=main.py
+      - FLASK_ENV=development
+    ports:
+      - "5000:5000"
+      - "5173:5173"
+    volumes:
+      - .:/ecoride_flask
+      - app_static:/app/static
+    working_dir: /ecoride_flask
+    depends_on:
+      - postgres
+    command: >
+      bash -c "
+        python main.py &
+        npm run dev &
+        npx @tailwindcss/cli -i app/static/css/styles.css -o app/static/css/tw-output.css --watch
+      "
+
+volumes:
+  db:
+  app_static:

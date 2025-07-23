@@ -1,0 +1,28 @@
+<div id="driver-preferences" class="w-full">
+  <form 
+    hx-post="{{ url_for('user.edit_driver_preferences', driver_id=current_user.id) }}"
+    hx-target="#driver-preferences"
+    hx-swap="outerHTML"
+    class="flex flex-col gap-4 bg-[var(--color-base2)] p-4 rounded w-full items-center"
+  >
+    <p class="font-semibold">Modifier vos préférences</p>
+
+    <div class="grid grid-cols-2 gap-2 w-full">
+      {% for p in all_prefs %}
+        <label class="flex items-center gap-2">
+          <input 
+            type="checkbox" 
+            name="preferences" 
+            value="{{ p.id }}" 
+            {% if p.name in selected_prefs %}checked{% endif %}
+          >
+          {{ p.name }}
+        </label>
+      {% endfor %}
+    </div>
+
+    <button type="submit" class="p-2 bg-[var(--color-base3)]">Enregistrer</button>
+  </form>
+</div>
+
+

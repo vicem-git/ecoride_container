@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}
+Tableau de bord
+{% endblock %}
+
+{% block main %}
+<main id="index-main" class="p-8 min-h-screen">
+  <div id="flash-messages" hx-swap-oob="true">
+    {% include "partials/flash.html" %}
+  </div>
+  {% include "partials/user_profile.html" %}
+</main>
+{% endblock %}

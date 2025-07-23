@@ -1,0 +1,20 @@
+<div class="grid gap-4">
+  {% for trip in trips %}
+    <div class="border rounded p-4 bg-[var(--color-base)] flex flex-col gap-2">
+      <div class="text-lg font-semibold">
+        {{ trip.summary.start_city }} → {{ trip.summary.end_city }}
+      </div>
+      <div class="text-sm text-gray-600">
+        {{ trip.summary.distance_km }} km · {{ trip.summary.estimated_duration_min }} min
+      </div>
+      <div class="text-sm">
+        {{ trip.summary.vehicle.brand }} {{ trip.summary.vehicle.model }} — {{ trip.summary.vehicle.seats }} seats
+      </div>
+      <div class="text-sm">
+        Prix: <strong>{{ trip.summary.price }}€</strong> · ⭐ {{ trip.summary.driver_rating }}
+      </div>
+    </div>
+  {% else %}
+    <p>Aucun voyage trouvé.</p>
+  {% endfor %}
+</div>

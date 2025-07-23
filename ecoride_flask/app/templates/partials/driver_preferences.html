@@ -1,0 +1,28 @@
+<div id="driver-preferences" class="flex flex-col rounded-sm gap-4 p-4 bg-[var(--color-base2)] justify-center items-center w-full">
+  <p>préférences du conducteur</p>
+  {% if driver_info and driver_info.preferences %}
+    {% set preferences = driver_info.preferences %}
+  {% elif preferences is not defined %}
+    {% set preferences = [] %}
+    <p class="text-gray-500">Aucune préférence définie.</p>
+  {% endif %}
+  {% if preferences %}
+    <p class="text-sm text-gray-700">
+      {{ preferences | map(attribute='name') | join(' — ') }}
+    </p>
+  {% else %}
+    <p class="text-gray-500">Aucune préférence définie.</p>
+  {% endif %}
+  {% if owner %}
+    <button 
+      hx-get="{{ url_for('user.edit_driver_preferences') }}"
+      hx-target="#driver-preferences"
+      hx-swap="outerHTML"
+      class="p-2 bg-[var(--color-base3)]"
+    >Modifier</button>
+  {% endif %}
+</div>
+
+
+
+

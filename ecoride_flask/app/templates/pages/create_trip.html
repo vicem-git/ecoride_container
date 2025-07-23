@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}
+Creation voyage
+{% endblock %}
+
+{% block main %}
+<main id="index-main" class="p-8 min-h-screen">
+  <div id="flash-messages" hx-swap-oob="true">
+    {% include "partials/flash.html" %}
+  </div>
+</main>
+{% endblock %}

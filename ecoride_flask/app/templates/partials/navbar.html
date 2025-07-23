@@ -1,0 +1,15 @@
+<div class="flex flex-row items-center gap-4">
+  {% if page_wrap in ["home"] %}
+    {% include "partials/trips-button.html" %}
+    {% include "partials/user-button.html" %}
+  {% elif page_wrap in ["register", "login"] %}
+    {% include "partials/home-button.html" %}
+    {% elif page_wrap in ["profile", "contact", "search_trips", "create_trip"] %}
+    {% include "partials/trips-button.html" %}
+    {% include "partials/user-button.html" %}
+    {% include "partials/home-button.html" %}
+  {% endif %}
+  {% include "partials/theme-button.html" %}
+
+</div> 
+

@@ -1,0 +1,19 @@
+    try:
+        with db_manager.connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT COUNT(*) FROM users")
+                user_count = cur.fetchone()[0]
+                if user_count < 10:
+                    seed_data(conn, num_drivers=50, num_users=150, trips_per_driver=3)
+                    logging.info("✅ Database seeded.")
+                else:
+                    logging.info("ℹ️ Seeding skipped: users already exist.")
+    except Exception as e:
+        logging.error(f"❌ Seeding error: {e}")
+
+    try:
+        with db_manager.connection() as conn:
+            generate_summaries(conn)
+            print("Trip summaries generated successfully now.")
+    except Exception as e:
+        logging.error(f"❌ Error generating trip summaries: {e}")
