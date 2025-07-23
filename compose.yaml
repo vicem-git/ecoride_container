@@ -13,6 +13,7 @@ services:
       - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
+      - ./ecoride_flask/app/db_store/db_init.sql:docker-entrypoint-initdb.d/init_db.sql:ro
 
   python_app:
     build:
