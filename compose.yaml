@@ -32,9 +32,8 @@ services:
       - "5000:5000"
       - "5173:5173"
     volumes:
-      - .:/ecoride_flask
-      - app_static:/app/static
-    working_dir: /ecoride_flask
+      - .:/ecoride_container/
+    working_dir: /ecoride_container/ecoride_flask
     depends_on:
       - postgres
     command: >
