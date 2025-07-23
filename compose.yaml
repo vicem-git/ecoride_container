@@ -38,9 +38,10 @@ services:
       - postgres
     command: >
       bash -c "
-        python main.py &
-        npm run dev &
+        npm install &&
         npx @tailwindcss/cli -i app/static/css/styles.css -o app/static/css/tw-output.css --watch
+        npm run dev &
+        python main.py         
       "
 
 volumes:
