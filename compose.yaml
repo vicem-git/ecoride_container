@@ -6,9 +6,9 @@ services:
     container_name: postgres_db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      POSTGRES_DB: ${POSTGRES_DB:-app_db}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ecoride_db
     ports:
       - "5432:5432"
     volumes:
@@ -18,14 +18,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ecoride_container
+    container_name: ecoride_python
     restart: unless-stopped
     environment:
       - DB_HOST=postgres
-      - DB_USER=${POSTGRES_USER:-postgres}
-      - DB_PASSWORD=${POSTGRES_PASSWORD:-postgres}
-      - DB_NAME=${POSTGRES_DB:-app_db}
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=ecoride_db
       - FLASK_APP=main.py
+      - FLASK_SECRET_KEY=flask_supersecret
       - FLASK_ENV=development
     ports:
       - "5000:5000"

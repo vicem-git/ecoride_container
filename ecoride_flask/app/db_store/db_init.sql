@@ -1,3 +1,6 @@
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE EXTENSION IF NOT EXISTS postgis;
+
 CREATE TABLE account_access (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name VARCHAR(50) UNIQUE NOT NULL
@@ -234,4 +237,5 @@ CREATE TABLE trip_summaries (
     summary JSONB NOT NULL,
     created_at TIMESTAMP DEFAULT now()
 );
+
 
