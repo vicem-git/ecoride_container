@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: ecoride_admin
-      POSTGRES_PASSWORD: cluny-matarosa-pomme-carroza
+      POSTGRES_PASSWORD: secret
       POSTGRES_DB: ecoride_db
     volumes:
       - db:/var/lib/postgresql/data
@@ -21,10 +21,10 @@ services:
       - DB_HOST=postgres
       - DB_USER=ecoride_admin
       - DB_PORT=5432
-      - DB_PASSWORD=cluny-matarosa-pomme-carroza
+      - DB_PASSWORD=secret
       - DB_NAME=ecoride_db
       - FLASK_APP=main.py
-      - FLASK_SECRET_KEY=chalon-bragueta-vallon-cancion
+      - FLASK_SECRET_KEY=secret
     ports:
       - "5000:5000"
     volumes:
