@@ -1,0 +1,10 @@
+{% for trip in trips %}
+  <div class="trip-item">
+    <p><strong>{{ trip.summary.start_city }}</strong> → <strong>{{ trip.summary.end_city }}</strong></p>
+    <p>Départ : {{ trip.summary.start_time[:16] }}</p>
+    <p>Prix : {{ trip.summary.price }}€</p>
+    <p>Conducteur : {{ trip.summary.driver_name }} — {{ trip.summary.driver_rating }}★</p>
+  </div>
+{% else %}
+  <p>Aucun voyage.</p>
+{% endfor %}

@@ -1,7 +1,4 @@
-/**
- * Toggle the "hidden" class on the passed element
- * @param {string|HTMLElement} el - a selector string or element
- */
+
 
 export function toggleHidden(el) {
   let elem = el;
@@ -13,8 +10,4 @@ export function toggleHidden(el) {
   }
 }
 
-document.body.addEventListener("htmx:beforeSwap", () => {
-  document.querySelectorAll(".dropdown").forEach((dropdown) => {
-    dropdown.classList.add("hidden");
-  });
-});
+

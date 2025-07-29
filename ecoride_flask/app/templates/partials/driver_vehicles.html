@@ -13,7 +13,7 @@
       </div>
       {% if owner %}
         <button 
-          hx-post="{{ url_for('user.remove_vehicle', vehicle_id=v.id) }}"
+          hx-post="{{ url_for('drivers.remove_vehicle', vehicle_id=v.id) }}"
           hx-target="#driver-vehicles"
           hx-swap="outerHTML"
           hx-confirm="Are you sure you want to delete this vehicle?"
@@ -25,7 +25,7 @@
 
   {% if owner %}
     <button 
-      hx-get="{{ url_for('user.add_vehicle') }}"
+      hx-get="{{ url_for('drivers.add_vehicle') }}"
       hx-target="#driver-vehicles"
       hx-swap="beforeend"
       class="p-2 bg-[var(--color-base3)] text-[var(color-base)]"

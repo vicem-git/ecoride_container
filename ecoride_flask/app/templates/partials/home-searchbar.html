@@ -1,9 +1,7 @@
 <form
-  hx-post="{{ url_for('trips.query_trips') }}"
-  hx-target="#trip-container"
-  hx-swap="innerHTML"
-  class="sticky top-24 px-4 py-2 w-full flex flex-row rounded-xs bg-[var(--color-base2)] h-[70px] gap-3 items-center"
-  >
+    method="GET"
+    action="{{ url_for('pages.search_trips') }}"
+    class="sticky top-24 px-4 py-2 w-full flex flex-row rounded-sm bg-[var(--color-base2)] h-[70px] gap-3 items-center">
   <div class="p-2 flex flex-row rounded-sm gap-2 w-[35%] items-center">
     <svg viewBox="0 0 24 24" class="w-[24px] h-[24px]">
       {% include "graphics/loc-point.html" %}    

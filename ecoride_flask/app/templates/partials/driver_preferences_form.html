@@ -1,6 +1,6 @@
 <div id="driver-preferences" class="w-full">
   <form 
-    hx-post="{{ url_for('user.edit_driver_preferences', driver_id=current_user.id) }}"
+    hx-post="{{ url_for('drivers.edit_driver_preferences', driver_id=current_user.id) }}"
     hx-target="#driver-preferences"
     hx-swap="outerHTML"
     class="flex flex-col gap-4 bg-[var(--color-base2)] p-4 rounded w-full items-center"

@@ -139,6 +139,7 @@ def set_user_roles(conn, user_id, roles):
     with conn.cursor() as cur:
         cur.execute("DELETE FROM user_roles WHERE user_id = %s", (user_id,))
         for role in roles:
+            print(f"inserting role : {role}")
             cur.execute(
                 "INSERT INTO user_roles (user_id, role_id) VALUES (%s, %s)",
                 (user_id, role),

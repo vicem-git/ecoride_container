@@ -8,13 +8,17 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme {  
+@theme {
+  --color-apart: oklch(0.6573 0.0456 275.07);
+  --color-apart2: oklch(0.5861 0.0532 275.07);
+  --color-apart3: oklch(0.5119 0.0532 275.07);
   --color-base: oklch(0.9799 0.0093 106.57);
   --color-base2: oklch(0.9036 0.0093 106.57);
   --color-base3: oklch(0.7671 0.0093 113.77);
   --color-base4: oklch(0.5988 0.0093 113.77);
-  --color-contrast: oklch(0.4471 0.0616 148.17);
-  --color-contrast-2: oklch(0.3071 0.0616 148.17);
+  --color-contrast: oklch(0.581 0.0616 148.17);
+  --color-contrast2: oklch(0.489 0.0616 148.17);
+  --color-contrast3: oklch(0.4471 0.0616 148.17);
   --color-success: oklch(0.822 0.0831 147.34);
   --color-error: oklch(0.6565 0.1689 24.16);
 

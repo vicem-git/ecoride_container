@@ -6,12 +6,9 @@ Inscription
 
 {% block main %}
 
-<main id="register-main" class="flex flex-col min-h-screen">
+<main id="register-main" class="flex flex-col min-h-screen items-center">
   <h1 class="text-3xl p-8 mb-12"> Ravi de vous rencontrer :) </h1>
-  <div id="register-indicator" class="htmx-indicator hidden">
-    <span class="animate-spin">Chargement...</span>
-  </div>
-  <div class="flex flex-col items-center justify-center bg-[var(--color-base)] mt-12">
+  <div class="flex flex-col items-center justify-center bg-base mt-6">
     {% include "partials/registration_form.html" %} 
   </div> 
 </main>

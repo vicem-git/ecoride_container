@@ -1,0 +1,11 @@
+
+{% if messages %}
+  <ul class="text-[var(--color-error)]">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+
+

@@ -15,7 +15,7 @@
   {% endif %}
   {% if owner %}
     <button 
-      hx-get="{{ url_for('user.edit_driver_preferences') }}"
+      hx-get="{{ url_for('drivers.edit_driver_preferences') }}"
       hx-target="#driver-preferences"
       hx-swap="outerHTML"
       class="p-2 bg-[var(--color-base3)]"

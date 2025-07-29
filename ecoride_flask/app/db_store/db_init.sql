@@ -1,3 +1,18 @@
+-- CREATE ROLE ecoride_admin WITH LOGIN PASSWORD 'your_secure_password';
+-- CREATE DATABASE ecoride_db OWNER ecoride_admin;
+-- GRANT ALL PRIVILEGES ON DATABASE ecoride_db TO ecoride_admin;
+-- \c ecoride_db
+CREATE SCHEMA IF NOT EXISTS public;
+GRANT USAGE, CREATE ON SCHEMA public TO ecoride_admin;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO ecoride_admin;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO ecoride_admin;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON FUNCTIONS TO ecoride_admin;
+
+
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+CREATE EXTENSION IF NOT EXISTS "postgis";
+
+
 CREATE TABLE account_access (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name VARCHAR(50) UNIQUE NOT NULL
@@ -144,7 +159,7 @@ CREATE TABLE vehicles (
     color VARCHAR(30) NOT NULL,
     photo_url VARCHAR(255) NULL,
     number_of_seats INTEGER NOT NULL,
-    energy_type_id UUID NOT NULL REFERENCES energy_types(id) ON DELETE CASCADE
+    energy_type UUID NOT NULL REFERENCES energy_types(id) ON DELETE CASCADE
 );
 
 CREATE TABLE trip_status (
@@ -194,6 +209,14 @@ CREATE TABLE trip_passengers (
   PRIMARY KEY (trip_id, user_id)
 );
 
+CREATE OR REPLACE VIEW trip_available_seats AS
+SELECT
+  t.id AS trip_id,
+  v.number_of_seats - COUNT(tp.user_id) AS available_seats
+FROM trips t
+JOIN vehicles v ON v.id = t.vehicle_id
+LEFT JOIN trip_passengers tp ON tp.trip_id = t.id
+GROUP BY t.id, v.number_of_seats;
 
 CREATE TABLE review_status (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -235,3 +258,12 @@ CREATE TABLE trip_summaries (
     created_at TIMESTAMP DEFAULT now()
 );
 
+CREATE VIEW trip_with_status_and_summary AS
+SELECT
+  t.id AS trip_id,
+  t.driver_id,
+  s.name AS status,
+  ts.summary
+FROM trips t
+JOIN trip_status s ON t.status_id = s.id
+LEFT JOIN trip_summaries ts ON ts.trip_id = t.id;

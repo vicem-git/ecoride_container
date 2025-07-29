@@ -4,98 +4,50 @@ from flask import (
     Blueprint,
     request,
     render_template,
-    redirect,
-    url_for,
-    make_response,
 )
 import logging
-from app.db_store import user_crud, driver_crud
-from flask_login import login_user, logout_user, login_required, current_user
-from app.utils.static_resolvers import static_name_resolver, static_id_resolver
-from app.utils.htmx_login_required import htmx_login_required
+from app.db_store import driver_crud
+from flask_login import login_required, current_user
+from app.utils.custom_decorators import htmx_login_required, require_ownership
 
-user_bp = Blueprint("user", __name__, url_prefix="/user")
+drivers_bp = Blueprint("drivers", __name__, url_prefix="/drivers")
 
 # MODULE LOGGER
 logger = logging.getLogger(__name__)
 
 
-@user_bp.route("/edit_roles", methods=["GET", "POST"])
+@drivers_bp.route("/driver_data/<user_id>")
 @htmx_login_required
-def edit_roles():
-    with current_app.db_manager.connection() as conn:
-        if request.method == "GET":
-            all_roles = user_crud.get_roles_list(conn)
-            current_roles = user_crud.get_user_roles(conn, current_user.user_id)
-
-            return render_template(
-                "partials/edit_roles_form.html",
-                all_roles=all_roles,
-                current_roles=current_roles,
-            )
-
-        elif request.method == "POST":
-            new_roles = request.form.getlist("roles")
-
-            print(f"New roles from form: {new_roles}")
-            new_roles_ids = [
-                role_id
-                for role_id in new_roles
-                if static_id_resolver("roles", role_id) is not None
-            ]
-
-            print(f"New roles IDs: {new_roles_ids}")
-
-            worked = user_crud.set_user_roles(conn, current_user.user_id, new_roles_ids)
-
-            print(f"Roles update worked: {worked}")
-
-            response = make_response("", 204)
-            response.headers["HX-Redirect"] = url_for(
-                "pages.profile", user_id=current_user.user_id
-            )
-            return response
-
-
-@user_bp.route("/get_account_credits")
-@login_required
-def get_account_credits():
-    with current_app.db_manager.connection() as conn:
-        credits = user_crud.get_user_credits(conn, current_user.user_id)
-    return render_template("partials/credits_fragment.html", credits=credits)
-
-
-@user_bp.route("/driver_data/<user_id>")
-@login_required
+@require_ownership("user_id")
 def get_driver_data(user_id):
+    user_id = request.view_args.get("user_id")
+    owner = str(current_user.user_id) == str(user_id)
+
+    driver_info = {}
     with current_app.db_manager.connection() as conn:
         driver_data = driver_crud.get_driver_data(conn, user_id)
-        if driver_data is None:
-            return {"error": "Driver data not found"}, 404
 
-        PREF_LABELS = {
-            "smoking_allowed": "Fumeur autorisé",
-            "non_smoking": "Non-fumeur",
-            "pets_allowed": "Animaux acceptés",
-            "no_pets_allowed": "Pas d'animaux",
-            "music_allowed": "Musique autorisée",
-            "no_music_allowed": "Pas de musique",
-            "air_conditioning": "Climatisation",
-            "no_air_conditioning": "Pas de climatisation",
-        }
+        if driver_data:
+            driver_id = driver_data["id"]
+            driver_preferences = driver_crud.get_driver_preferences(conn, driver_id)
+            driver_vehicles = driver_crud.get_driver_vehicles(conn, driver_id)
 
-        prefs = driver_crud.get_driver_preferences(conn, str(driver_data[0]))
-        vehicles = driver_crud.get_driver_vehicles(conn, user_id)
-        return render_template(
-            "partials/driver_info.html",
-            driver_data=driver_data,
-            prefs=prefs,
-            labels=PREF_LABELS,
-            vehicles=vehicles,
-        )
+            driver_info = {
+                "data": driver_data,
+                "preferences": driver_preferences,
+                "vehicles": driver_vehicles,
+            }
+
+    return render_template(
+        "partials/driver_info.html",
+        driver_data=driver_info,
+        owner=owner,
+    )
 
 
-@user_bp.route("/edit_driver_preferences", methods=["GET", "POST"])
+@drivers_bp.route("/edit_driver_preferences", methods=["GET", "POST"])
+@htmx_login_required
+@require_ownership("user_id")
 def edit_driver_preferences():
     with current_app.db_manager.connection() as conn:
         driver_data = driver_crud.get_driver_data(conn, current_user.user_id)
@@ -126,8 +78,9 @@ def edit_driver_preferences():
         )
 
 
-@user_bp.route("add_vehicle", methods=["GET", "POST"])
+@drivers_bp.route("add_vehicle", methods=["GET", "POST"])
 @htmx_login_required
+@require_ownership("user_id")
 def add_vehicle():
     if request.method == "GET":
         with current_app.db_manager.connection() as conn:
@@ -160,8 +113,9 @@ def add_vehicle():
         )
 
 
-@user_bp.route("/remove_vehicle/<uuid:vehicle_id>", methods=["POST"])
+@drivers_bp.route("/remove_vehicle/<uuid:vehicle_id>", methods=["POST"])
 @htmx_login_required
+@require_ownership("user_id")
 def remove_vehicle(vehicle_id):
     with current_app.db_manager.connection() as conn:
         driver_data = driver_crud.get_driver_data(conn, current_user.user_id)

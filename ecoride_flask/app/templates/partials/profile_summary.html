@@ -1,5 +1,4 @@
 <section class="flex flex-col gap-4 justify-center w-full">
-  <p class="p-4 text-xl">welcome {{ current_user.username }} - you landed here at {{ current_time }}</p>
   <div class="flex flex-row gap-4 bg-[var(--color-base2)] justify-left items-center">
     <div class="p-4 w-48 h-48">
       <img src="{{ url_for('static', filename='graphics/default-profile2.jpg') }}" alt="profile-pic" class="object-cover rounded-full">
@@ -10,7 +9,7 @@
         <p>Username: {{ current_user.username }}</p>
         <p>Email: {{ current_user.email }}</p>
         {% if owner %}
-          <div id="credits-container" hx-get="{{ url_for('user.get_account_credits') }}" hx-trigger="load" hx-swap="innerHTML">
+          <div id="credits-container" hx-get="{{ url_for('users.get_account_credits') }}" hx-trigger="load" hx-swap="innerHTML">
             Loading credits...
           </div> 
         {% endif %}
@@ -20,7 +19,7 @@
         {% if owner %}
           <button
             class="p-2 bg-[var(--color-base3)] text-[var(--color-base) rounded-sm hover:bg-[var(--color-base3)]"
-            hx-get="{{ url_for('user.edit_roles') }}"
+            hx-get="{{ url_for('users.edit_roles') }}"
             hx-target="#roles-container"
             hx-swap="innerHTML"
           >

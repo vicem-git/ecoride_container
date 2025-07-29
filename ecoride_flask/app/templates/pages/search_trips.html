@@ -6,46 +6,9 @@ Recherche de voyages
 
 {% block main %}
 <main id="index-main" class="p-8 flex flex-col min-h-screen w-full">
-  <form
-    method="POST"
-    action="{{ url_for('trips.query_trips') }}"
-    hx-post="{{ url_for('trips.query_trips') }}"
-    hx-target="#trip-container"
-    hx-swap="innerHTML"
-    class="sticky top-24 px-4 py-2 w-full flex flex-row rounded-xs bg-[var(--color-base2)] h-[70px] gap-3 items-center">
-    <div class="p-2 flex flex-row rounded-sm bg-[var(--color-base)] gap-2 w-[35%] items-center">
-      <svg viewBox="0 0 24 24" class="w-[24px] h-[24px]">
-        {% include "graphics/loc-point.html" %}    
-      </svg>
-      <select id="start-point-search" name="start_city" placeholder="Départ..." class="w-full">
-        <option value="">Sélectionner une ville</option>
-        {% for city in cities %}
-          <option value="{{ city }}">{{ city }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="p-2 flex flex-row rounded-sm bg-[var(--color-base)] gap-2 w-[35%] items-center">
-      <svg viewBox="0 0 24 24" class="w-[24px] h-[24px]">
-        {% include "graphics/loc-point.html" %}    
-      </svg>
-      <select id="end-point-search" name="end_city" placeholder="Arrivée..." class="w-full">
-        <option value="">Sélectionner une ville</option>
-        {% for city in cities %}
-          <option value="{{ city }}">{{ city }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <input type="date" id="start_date" name="start_date" class="h-[48px] w-[106px] p-2 rounded-sm focus:ring-2 focus:ring-lime-400 focus:outline-none" />
-    <button
-      type="submit"
-      class="h-[48px] px-4 rounded-sm bg-[var(--color-base2)] hover:bg-[var(--color-base3)] focus:ring-2 focus:ring-lime-400 focus:outline-none">
-      <svg viewBox="0 0 24 24" class="w-[24px] h-[24px]">
-        {% include "graphics/search-icon.html" %}
-      </svg>
-    </button>
-  </form>
+  {% include "partials/searchbar.html" %} 
   <div id="trip-container" class="w-full">
-  
+    {% include "partials/trip_results.html" %} 
   </div>
 </main>
 {% endblock %}

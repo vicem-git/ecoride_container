@@ -5,17 +5,16 @@ from flask import (
     redirect,
     render_template,
     make_response,
-    jsonify,
     url_for,
-    flash,
 )
+import json
 import logging
-from app.db_store import crud_utilities, user_crud
+from app.db_store import crud_utilities, user_crud, driver_crud
 from app.models import RegistrationData, LoginData, SessionUser
 from pydantic import ValidationError
 from app.utils import bcrypt
 from flask_login import login_user, logout_user, login_required
-from app.utils.static_resolvers import static_id_resolver
+from app.utils.static_resolvers import static_id_resolver, static_name_resolver
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -48,23 +47,41 @@ def register_user():
     try:
         reg_data = RegistrationData(**data)
 
+        role_ids = []
+        for role in reg_data.roles:
+            static_role = static_name_resolver("roles", role)
+            role_ids.append(str(static_role) if static_role else None)
+
         with current_app.db_manager.connection() as conn:
             existing_account = user_crud.get_user_by_email(conn, reg_data.email)
 
             if existing_account:
-                flash("un compte existe déjà avec cet email. veuillez vous connecter.")
-                return make_response(render_template("partials/flash.html"), 409)
+                message = [
+                    "un compte existe déjà avec cet email. veuillez vous connecter."
+                ]
+                return make_response(
+                    render_template("partials/server_msg.html", message=message), 200
+                )
 
             if user_crud.check_username(conn, reg_data.username):
-                flash("Nom d'utilisateur déjà pris.")
-                return make_response(render_template("partials/flash.html"), 409)
+                message = ["Nom d'utilisateur déjà pris."]
+                return make_response(
+                    render_template("partials/server_msg.html", message=message), 200
+                )
 
             hashed_pw = bcrypt.generate_password_hash(reg_data.password, 14).decode(
                 "utf-8"
             )
             account_id = user_crud.create_account(conn, reg_data.email, hashed_pw)
             user_id = user_crud.create_user(conn, account_id, reg_data.username)
-            user_crud.set_user_roles(conn, user_id, reg_data.roles)
+
+            user_crud.set_user_roles(conn, user_id, role_ids)
+            driver_id = current_app.static_ids["roles"]["driver"]
+
+            if str(driver_id) in role_ids:
+                driver_id = driver_crud.create_driver(conn, user_id)
+                if driver_id is None:
+                    raise Exception("error while creating driver profile")
 
             session_user = SessionUser(
                 account_id=account_id,
@@ -76,19 +93,33 @@ def register_user():
             )
             login_user(session_user)
 
-            response = make_response("", 201)
-            response.headers["HX-Redirect"] = url_for("pages.profile", user_id=user_id)
+            response = make_response(
+                render_template(
+                    "partials/server_msg.html",
+                    messages=["Utilisateur inscrit, redirection..."],
+                )
+            )
+            response.headers["HX-Trigger"] = json.dumps(
+                {"redirectTo": url_for("pages.login")}
+            )
             return response
 
     except ValidationError as ve:
-        for err in ve.errors():
-            flash(f"{err['loc'][0]}: {err['msg']}")
-        return make_response(render_template("partials/flash.html"), 400)
+        logger.error("Validation error during registration: %s", ve.errors())
+        errors = ve.errors()
+        messages = [
+            error["msg"].removeprefix("Value error, ").strip() for error in errors
+        ]
+        return make_response(
+            render_template("partials/server_msg.html", messages=messages), 200
+        )
 
     except Exception as e:
         logger.error("Registration failed: %s", str(e))
-        flash("Something went wrong. Try again later.")
-        return make_response(render_template("partials/flash.html"), 500)
+        message = ["Une erreur s'est produite. Réessayez plus tard."]
+        return make_response(
+            render_template("partials/server_msg.html", message=message), 500
+        )
 
 
 @auth_bp.route("/login", methods=["POST"])
@@ -105,14 +136,18 @@ def login():
 
             if login_response is None:
                 # if no account found, return error
-                flash("No account found with this email.")
-                response = make_response("", 404)
+                messages = ["No account found with this email."]
+                response = make_response(
+                    render_template("partials/server_msg.html", messages=messages), 200
+                )
                 return response
 
             if login_response["account_status_id"] == "suspended":
                 # if account found, but not suspended, return error
-                flash("This account has been suspended.")
-                response = make_response("", 403)
+                messages = ["This account has been suspended."]
+                response = make_response(
+                    render_template("partials/server_msg.html", messages=messages), 200
+                )
                 return response
 
             # if account found, and account_status_id != "suspended", try to retrieve the password hash
@@ -126,8 +161,10 @@ def login():
 
             if not login_ok:
                 # if password does not match, return error
-                flash("Incorrect password.")
-                response = make_response("", 401)
+                messages = ["Incorrect password."]
+                response = make_response(
+                    render_template("partials/server_msg.html", messages=messages), 200
+                )
                 return response
 
             session_user = user_crud.get_user_object(conn, login_response["id"])
@@ -140,8 +177,12 @@ def login():
                 "account_access", session_user.account_access_id
             )
 
-            print("Access Level:", access_level)
-            print("Session User:", session_user.user_id)
+            response = make_response(
+                render_template(
+                    "partials/server_msg.html",
+                    messages=["Connexion réussie, redirection..."],
+                )
+            )
 
             if access_level == "admin":
                 url = url_for("pages.admin_dashboard")
@@ -157,25 +198,28 @@ def login():
                 )
                 url = url_for("pages.index")  # fallback
 
-            response = make_response("", 204)
-            response.headers["HX-Redirect"] = url
+            response.headers["HX-Trigger"] = json.dumps({"redirectTo": url})
             return response
 
     except ValidationError as ve:
-        logger.error("Validation error:", ve.errors())
-        for err in ve.errors():
-            flash(f"{err['loc'][0]}: {err['msg']}")
-        return make_response("", 400)
+        logger.error("Validation error during login: %s", ve.errors())
+        errors = ve.errors()
+        messages = [
+            error["msg"].removeprefix("Value error, ").strip() for error in errors
+        ]
+        return make_response(
+            render_template("partials/server_msg.html", messages=messages), 200
+        )
 
     except Exception as e:
-        logger.error("Error during user login:", str(e))
-        return jsonify(
-            {"error": "A server error occurred. Please try again later."}
-        ), 500
+        logger.error("Login failed: %s", str(e))
+        message = ["Une erreur s'est produite. Réessayez plus tard."]
+        return make_response(
+            render_template("partials/server_msg.html", message=message), 500
+        )
 
 
 @auth_bp.route("/logout")
-@login_required
 def logout():
     logout_user()
     return redirect(url_for("pages.index"))
