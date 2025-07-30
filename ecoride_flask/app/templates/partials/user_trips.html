@@ -1,49 +1,62 @@
-{% macro trip_item(trip) %}
-  <div class="trip-item p-2 border rounded">
-    <p>{{ trip.summary.start_city }} → {{ trip.summary.end_city }}</p>
-    <p>Départ : {{ trip.summary.start_time }}</p>
-    <p>Status : {{ trip.status }}</p> 
-  </div>
-{% endmacro %}
-
-<section id="user-trips" class="p-4 flex flex-col gap-6 rounded-sm bg-base2">
+<section id="user-trips" class="p-4 flex flex-col gap-6 rounded-sm bg-ground2">
   <h2>Voyages</h2>
   <div class="flex flex-col gap-6">
     {% if "passenger" in roles %}
       <div class="flex justify-start">
-        <h3 class="p-4 bg-base3">Passager</h3>
+        <h3 class="p-4 bg-ground3">Passager</h3>
         <div class="flex flex-col ml-8">
           <h4>À venir</h4>
           <div
             id="passenger-upcoming"
-            hx-get="{{ url_for('trips.passenger_trips_by_status', status="upcoming") }}"
+            hx-get="{{ url_for('trips.passenger_trips_by_status', user_id=current_user.user_id, status="upcoming") }}"
             hx-trigger="load"
             hx-target="#passenger-upcoming"
             hx-swap="outerHTML"
+            hx-indicator="#pas-up-spinner"
           >
-            <p class="text-base3">Chargement...</p>
+            <svg id="pas-up-spinner" viewBox="0 0 24 24" class="hidden p-2 w-12 h-12">
+              {% include "graphics/spinner_bars.html" %}
+            </svg>
+            {% if trips %}
+            {% else %}
+              <p class="p-2 text-ground3">Aucun voyage à venir.</p>
+            {% endif %}
           </div>
 
           <h4>En cours</h4>
           <div
             id="passenger-in-progress"
-            hx-get="{{ url_for('trips.passenger_trips_by_status', status="in-progress") }}"
+            hx-get="{{ url_for('trips.passenger_trips_by_status', user_id=current_user.user_id, status="in-progress") }}"
             hx-trigger="load"
             hx-target="#passenger-in-progress"
             hx-swap="outerHTML"
+            hx-indicator="#pas-in-progress-spinner"
           >
-            <p class="text-base3">Chargement...</p>
+            <svg id="pas-in-progress-spinner" viewBox="0 0 24 24" class="hidden p-2 w-12 h-12">
+              {% include "graphics/spinner_bars.html" %}
+            </svg>
+            {% if trips %}
+            {% else %}
+              <p class="p-2 text-ground3">Aucun voyage en cours.</p>
+            {% endif %}          
           </div>
 
           <h4>Terminés</h4>
           <div
             id="passenger-completed"
-            hx-get="{{ url_for('trips.passenger_trips_by_status', status="completed") }}"
+            hx-get="{{ url_for('trips.passenger_trips_by_status', user_id=current_user.user_id, status="completed") }}"
             hx-trigger="load"
             hx-target="#passenger-completed"
             hx-swap="outerHTML"
+            hx-indicator="#pas-comp-spinner"
           >
-            <p class="text-base3">Chargement...</p>
+            <svg id="pas-comp-spinner" viewBox="0 0 24 24" class="hidden p-2 w-12 h-12">
+              {% include "graphics/spinner_bars.html" %}
+            </svg>
+            {% if trips %}
+            {% else %}
+              <p class="p-2 text-ground3">Aucun voyage complété.</p>
+            {% endif %}
           </div>
         </div> 
       </div>
@@ -51,39 +64,60 @@
 
     {% if "driver" in roles %}
       <div class="flex justify-start">
-        <h3 class="p-4 bg-base3">Conducteur.ice</h3>
+        <h3 class="p-4 bg-ground3">Conducteur.ice</h3>
         <div class="flex flex-col ml-8">
           <h4>À venir</h4>
           <div
             id="driver-upcoming"
-            hx-get="{{ url_for('trips.driver_trips_by_status', status="upcoming") }}"
+            hx-get="{{ url_for('trips.driver_trips_by_status', user_id=current_user.user_id, status="upcoming") }}"
             hx-trigger="load"
             hx-target="#driver-upcoming"
             hx-swap="outerHTML"
+            hx-indicator="#driver-up-spinner"
           >
-            <p class="text-base3">Chargement...</p>
+            <svg id="dr-up-spinner" viewBox="0 0 24 24" class="hidden p-2 w-12 h-12">
+              {% include "graphics/spinner_bars.html" %}
+            </svg>
+            {% if trips %}
+            {% else %}
+              <p class="p-2 text-ground3">Aucun voyage à venir.</p>
+            {% endif %}
           </div>
 
           <h4>En cours</h4>
           <div
             id="driver-in-progress"
-            hx-get="{{ url_for('trips.driver_trips_by_status', status="in-progress") }}"
+            hx-get="{{ url_for('trips.driver_trips_by_status', user_id=current_user.user_id, status="in-progress") }}"
             hx-trigger="load"
             hx-target="#driver-in-progress"
             hx-swap="outerHTML"
+            hx-indicator="#driver-in-progress-spinner"
           >
-            <p class="text-base3">Chargement...</p>
+            <svg id="driver-in-progress-spinner" viewBox="0 0 24 24" class="hidden p-2 w-12 h-12">
+              {% include "graphics/spinner_bars.html" %}
+            </svg>
+            {% if trips %}
+            {% else %}
+              <p class="p-2 text-ground3">Aucun voyage en cours.</p>
+            {% endif %}
           </div>
 
           <h4>Terminés</h4>
           <div
             id="driver-completed"
-            hx-get="{{ url_for('trips.driver_trips_by_status', status="completed") }}"
+            hx-get="{{ url_for('trips.driver_trips_by_status', user_id=current_user.user_id, status="completed") }}"
             hx-trigger="load"
             hx-target="#driver-completed"
             hx-swap="outerHTML"
+            hx-indicator="#driver-completed-spinner"
           >
-            <p class="text-base3">Chargement...</p>
+            <svg id="driver-comp-spinner" viewBox="0 0 24 24" class="hidden p-2 w-12 h-12">
+              {% include "graphics/spinner_bars.html" %}
+            </svg>
+            {% if trips %}
+            {% else %}
+              <p class="p-2 text-ground3">Aucun voyage en complété.</p>
+            {% endif %}
           </div>
         </div>
       </div>

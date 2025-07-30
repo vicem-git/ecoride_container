@@ -65,7 +65,7 @@ def search_trips():
 
     # NEED TO ESCAPE SMTH ?
     with current_app.db_manager.connection() as conn:
-        trips = trips_crud.search_trips(
+        trips = trips_crud.search_summaries_asst(
             conn,
             start_city=start_city,
             end_city=end_city,

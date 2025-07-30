@@ -5,9 +5,9 @@ Acceuil
 {% endblock %}
 
 {% block main %}
-<main id="index-main" class="p-8 min-h-screen">
+<main id="index-main" class="pb-8 pt-2 min-h-screen">
   {% include "partials/home-searchbar.html" %}
-  <section class="p-12 flex flex-col mt-8 rounded-lg items-center text-contrast shadow-lg shadow-contrast/20">
+  <section class="p-12 flex flex-col mt-8 rounded-lg bg-ground1 opacity-90 items-center text-contrast shadow-lg shadow-contrast/20 z-0">
     <section class="mb-12">
       <h2 class="text-2xl p-2">EcoRide connecte les voyageurs <strong>éco-responsables</strong></h2>
       <p class="text-2xl">à des solutions de covoiturage <strong>abordables</strong> et <strong>fiables</strong>.</p>
@@ -15,33 +15,33 @@ Acceuil
     <div class="flex gap-8 items-center">
       <section class="text-center">
         <h2 class="text-lg mb-4"><strong>Mobilité écologique :</strong><br>Réduisez votre empreinte carbone</h2>
-        <p class="text-base3">Chaque trajet partagé, c’est une voiture de moins sur la route. Avec EcoRide, vous réduisez vos émissions de CO₂ tout en adoptant une manière de voyager plus responsable Voyager devient un acte écologique sans effort supplémentaire, juste en changeant d’habitude.</p>
+        <p class="text-ground4">Chaque trajet partagé, c’est une voiture de moins sur la route. Avec EcoRide, vous réduisez vos émissions de CO₂ tout en adoptant une manière de voyager plus responsable Voyager devient un acte écologique sans effort supplémentaire, juste en changeant d’habitude.</p>
       </section>
       <section class="text-center">
         <h2 class="text-lg mb-4"><strong>Voyages abordables :</strong><br>voyagez plus pour moins cher</h2>
-        <p class="text-base3"> Carburant, péages, entretien… le covoiturage permet de diviser ces dépenses. Avec EcoRide, vous pouvez proposer ou réserver un trajet à moindre coût, tout en gardant un bon niveau de confort. Une solution simple, juste, et efficace pour mieux gérer ses déplacements au quotidien.</p>
+        <p class="text-ground4"> Carburant, péages, entretien… le covoiturage permet de diviser ces dépenses. Avec EcoRide, vous pouvez proposer ou réserver un trajet à moindre coût, tout en gardant un bon niveau de confort. Une solution simple, juste, et efficace pour mieux gérer ses déplacements au quotidien.</p>
       </section>
       <section class="text-center">
         <h2 class="text-lg mb-4"><strong>Communauté engagée :</strong><br>partagez un moment et créez du lien</h2>
-        <p class="text-base3">EcoRide rassemble une communauté de voyageurs solidaires et respectueux de l’environnement. Voyager ensemble, c’est aussi redonner du sens à nos déplacements et créer du lien autrement. Faites des rencontres, simplement en voyageant.</p>
+        <p class="text-ground4">EcoRide rassemble une communauté de voyageurs solidaires et respectueux de l’environnement. Voyager ensemble, c’est aussi redonner du sens à nos déplacements et créer du lien autrement. Faites des rencontres, simplement en voyageant.</p>
       </section> 
     </div>
   </section>
-  <section class="flex mt-8 rounded-lg items-center text-contrast shadow-lg shadow-contrast/20">
+  <section class="flex mt-8 rounded-lg bg-ground1 items-center text-contrast shadow-lg shadow-contrast/20">
     <img src="{{ url_for('static', filename='graphics/acceuil.jpg') }}" alt="image d'acceuil" class="w-[50%] object-cover rounded-sm">
     <section class="p-16 flex flex-col justify-center items-center ml-8 gap-12">
       <div class="flex justify-center items-center">
         <h2 class="text-xl font-bold">"Votre accès<br>à un covoiturage plus vert <br>et plus abordable."</h2>
         <div class="flex flex-col p-4 items-center">
-      <p class="text-base3 text-center mb-4">Rejoignez-nous <br>pour vous lancer dans<br>des voyages plus écologiques.</p>
-          <a href="{{ url_for('pages.registration') }}" class="p-2 bg-base2 rounded-sm">S'inscrire</a>
+      <p class="text-ground4 text-center mb-4">Rejoignez-nous <br>pour vous lancer dans<br>des voyages plus écologiques.</p>
+          <a href="{{ url_for('pages.registration') }}" class="p-2 bg-ground2 rounded-sm">S'inscrire</a>
         </div> 
       </div>
       <div class="flex justify-center items-center">
         <h2 class="text-xl font-bold">"Voyagez avec EcoRide,<br>c'est voyager autrement."</h2>
         <div class="flex flex-col p-4 items-center">
-          <p class="text-base3 text-center mb-4">Découvrez une nouvelle<br>façon de voyager, plus<br>respectueuse de l'environnement.</p>
-          <a href="{{ url_for('pages.search_trips') }}" class="p-2 bg-base2 rounded-sm">Trouver un voyage</a>
+          <p class="text-ground4 text-center mb-4">Découvrez une nouvelle<br>façon de voyager, plus<br>respectueuse de l'environnement.</p>
+          <a href="{{ url_for('pages.search_trips') }}" class="p-2 bg-ground2 rounded-sm">Trouver un voyage</a>
         </div>
       </div>
     </section> 

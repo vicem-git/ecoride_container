@@ -130,50 +130,47 @@ def set_trip_rating(conn, trip_id, rating):
         return True
 
 
-def search_trips(
+def search_summaries_asst(
     conn,
     start_city=None,
     end_city=None,
     passenger_nr=None,
-    max_price=None,
     start_date=None,
+    max_price=None,
 ):
+    conn.autocommit = True
     query = """
-        SELECT s.*
-        FROM trip_summaries s
-        WHERE 1=1
+        SELECT *
+        FROM trip_summaries_asst
+        WHERE status IN ('pending', 'upcoming')
     """
     params = []
 
     if start_city:
-        query += " AND s.summary->>'start_city' = %s"
+        query += " AND summary->>'start_city' = %s"
         params.append(start_city)
 
     if end_city:
-        query += " AND s.summary->>'end_city' = %s"
+        query += " AND summary->>'end_city' = %s"
         params.append(end_city)
 
-    if max_price:
-        query += " AND (s.summary->>'price')::int <= %s"
-        params.append(max_price)
+    if passenger_nr:
+        query += " AND available_seats >= %s"
+        params.append(int(passenger_nr))
 
     if start_date and start_date.lower() != "none":
-        query += " AND (s.summary->>'start_time')::timestamp >= %s"
+        query += " AND (summary->>'start_time')::timestamp >= %s"
         params.append(start_date)
 
-    query += " ORDER BY (s.summary->>'start_time')::timestamp ASC"
+    if max_price:
+        query += " AND (summary->>'price')::int <= %s"
+        params.append(max_price)
+
+    query += " ORDER BY (summary->>'start_time')::timestamp ASC"
 
     with conn.cursor(row_factory=dict_row) as cur:
         cur.execute(query, params)
         trips = cur.fetchall()
-
-    for trip in trips:
-        trip_id = trip.get("trip_id")
-        trip["available_seats"] = get_trip_available_seats(conn, trip_id)
-
-    if passenger_nr:
-        passenger_nr = int(passenger_nr)
-        trips = [trip for trip in trips if trip["available_seats"] >= int(passenger_nr)]
 
     return trips if trips else None
 

@@ -1,4 +1,4 @@
-<div id="driver-vehicles" class="p-4 flex flex-col rounded-sm gap-3 bg-[var(--color-base2)] items-center justify-center w-full">
+<div id="driver-vehicles" class="p-4 flex flex-col rounded-sm gap-3 bg-ground2 items-center justify-center w-full">
   <p>VEHICULES</p>
   {% if driver_info and driver_info.vehicles %}
     {% set vehicles = driver_info.vehicles %}
@@ -17,7 +17,7 @@
           hx-target="#driver-vehicles"
           hx-swap="outerHTML"
           hx-confirm="Are you sure you want to delete this vehicle?"
-          class="text-red-500 text-sm"
+          class="text-error text-sm"
         >✕ Supprimer</button>
       {% endif %}
     </div>
@@ -28,7 +28,7 @@
       hx-get="{{ url_for('drivers.add_vehicle') }}"
       hx-target="#driver-vehicles"
       hx-swap="beforeend"
-      class="p-2 bg-[var(--color-base3)] text-[var(color-base)]"
+      class="p-2 bg-ground3 text-ground"
     >+ Ajouter un véhicule</button>
   {% endif %}
 </div>

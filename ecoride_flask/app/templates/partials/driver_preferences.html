@@ -4,21 +4,21 @@
     {% set preferences = driver_info.preferences %}
   {% elif preferences is not defined %}
     {% set preferences = [] %}
-    <p class="text-gray-500">Aucune préférence définie.</p>
+    <p class="text-ground3">Aucune préférence définie.</p>
   {% endif %}
   {% if preferences %}
     <p class="text-sm text-gray-700">
       {{ preferences | map(attribute='name') | join(' — ') }}
     </p>
   {% else %}
-    <p class="text-gray-500">Aucune préférence définie.</p>
+    <p class="text-ground3">Aucune préférence définie.</p>
   {% endif %}
   {% if owner %}
     <button 
       hx-get="{{ url_for('drivers.edit_driver_preferences') }}"
       hx-target="#driver-preferences"
       hx-swap="outerHTML"
-      class="p-2 bg-[var(--color-base3)]"
+      class="p-2 bg-ground2"
     >Modifier</button>
   {% endif %}
 </div>

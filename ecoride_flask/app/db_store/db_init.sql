@@ -267,3 +267,13 @@ SELECT
 FROM trips t
 JOIN trip_status s ON t.status_id = s.id
 LEFT JOIN trip_summaries ts ON ts.trip_id = t.id;
+
+CREATE OR REPLACE VIEW trip_summaries_asst AS
+SELECT
+  twss.trip_id,
+  twss.driver_id,
+  twss.status,
+  twss.summary,
+  tas.available_seats
+FROM trip_with_status_and_summary twss
+JOIN trip_available_seats tas ON twss.trip_id = tas.trip_id;

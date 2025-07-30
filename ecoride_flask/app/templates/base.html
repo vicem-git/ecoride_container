@@ -6,27 +6,26 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='graphics/ecoride-logo.svg') }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% endblock %} - ecoRide</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='dist/assets/app-CbouNtjt.css') }}" />
-    <script type="module" src="{{ url_for('static', filename='dist/assets/app-DA2uj2ba.js') }}"></script>
+    <script type="module" src="http://localhost:5173/js/app.js"></script>
     {% endblock %}
   </head>
-  <body class="bg-[var(--color-base)] text-[var(--color-contrast)] font-sans font-semibold flex flex-col items-center">
+  <body class="flex flex-col bg-ground text-contrast2 font-sans font-semibold items-center">
    <div id="banner">
      {% block banner %}
       {% include "partials/banner.html" %}
      {% endblock %}
    </div>
-   <div id="header" class="fixed top-2 flex flex-col justify-center items-center w-full h-[72px]">
+   <div id="header" class="fixed top-2 flex flex-col justify-center items-center w-full h-[72px] z-99">
      {% block header %}
       {% include "partials/header.html" %}
      {% endblock %}
    </div>
-   <div id="main-content" class="w-[70%] bg-var(--color-base)">
+   <div id="main-content" class="w-[70%] bg-ground">
      {% block main %}
       MAIN CONTENT
      {% endblock %}
    </div>
-   <footer id="footer" class="flex w-full p-4 bg-base3 justify-center items-center">
+   <footer id="footer" class="flex w-full p-4 bg-ground3 justify-center items-center">
      {% block foot %}
       {% include "partials/footer.html" %}
      {% endblock %}

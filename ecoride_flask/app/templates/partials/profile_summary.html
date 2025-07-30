@@ -1,5 +1,5 @@
 <section class="flex flex-col gap-4 justify-center w-full">
-  <div class="flex flex-row gap-4 bg-[var(--color-base2)] justify-left items-center">
+  <div class="flex flex-row gap-4 bg-ground2 justify-left items-center">
     <div class="p-4 w-48 h-48">
       <img src="{{ url_for('static', filename='graphics/default-profile2.jpg') }}" alt="profile-pic" class="object-cover rounded-full">
     </div>
@@ -18,7 +18,7 @@
         <p>Rôles: {{ roles }}</p>
         {% if owner %}
           <button
-            class="p-2 bg-[var(--color-base3)] text-[var(--color-base) rounded-sm hover:bg-[var(--color-base3)]"
+            class="p-2 bg-ground3 text-ground1 rounded-sm hover:bg-ground4"
             hx-get="{{ url_for('users.edit_roles') }}"
             hx-target="#roles-container"
             hx-swap="innerHTML"

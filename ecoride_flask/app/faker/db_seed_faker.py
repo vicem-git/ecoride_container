@@ -200,10 +200,15 @@ def seed_data(conn, num_drivers=1000, num_users=1500, trips_per_driver=5):
                         ),
                     )
 
-                    # Add random passengers
-                    chosen_passengers = random.sample(
-                        passenger_ids, random.randint(1, 3)
+                    cur.execute(
+                        "SELECT number_of_seats FROM vehicles WHERE id = %s",
+                        (vehicle_id,),
                     )
+                    max_passengers = cur.fetchone()[0]
+
+                    num_passengers = random.randint(1, min(3, max_passengers))
+                    chosen_passengers = random.sample(passenger_ids, num_passengers)
+
                     for pid in chosen_passengers:
                         cur.execute(
                             "INSERT INTO trip_passengers (trip_id, user_id) VALUES (%s, %s)",

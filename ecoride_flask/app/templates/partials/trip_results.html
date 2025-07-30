@@ -1,20 +1,57 @@
-<div class="grid gap-4">
+<div class="flex flex-col mt-8 gap-4 items-center">
   {% for trip in trips %}
-    <div class="border rounded p-4 bg-[var(--color-base)] flex flex-col gap-2">
-      <div class="text-lg font-semibold">
-        {{ trip.summary.start_city }} → {{ trip.summary.end_city }}
+    <div class="flex rounded p-8 bg-ground1 gap-2 w-[70%] justify-between items-center">
+      <div class="flex flex-col gap-2">
+        <div class="flex text-lg font-semibold text-contrast2 items-center">
+          {{ trip.summary.start_city }}
+          <svg viewbox="0 0 110 30" class="p2 w-32 h-5">
+            {% include "graphics/travel_right.html" %}
+          </svg>
+          {{ trip.summary.end_city }}
+        </div>
+        <div class="flex text-base text-apart2 space-x-6 items-end">
+          <p>{{ trip.summary.start_time|fr_date }}</p>
+          <p class="text-lg">·····</p>
+          <p>{{ trip.summary.estimated_duration_min }} min</p>
+        </div>
       </div>
-      <div class="text-sm text-gray-600">
-        {{ trip.summary.distance_km }} km · {{ trip.summary.estimated_duration_min }} min
-      </div>
-      <div class="text-sm">
-        {{ trip.summary.vehicle.brand }} {{ trip.summary.vehicle.model }} — {{ trip.summary.vehicle.seats }} seats
-      </div>
-      <div class="text-sm">
-        Prix: <strong>{{ trip.summary.price }}€</strong> · ⭐ {{ trip.summary.driver_rating }}
-      </div>
+      {% if trip.summary.vehicle.energy == "electrique" %}
+        <div class="flex items-center gap-2">
+          <p class="text-sm text-eco">eco voyage</p>
+          <svg viewBox="0 0 24 24" class="w-6 h-6">
+            {% include "graphics/eco-trip.html" %}
+          </svg>
+        </div>
+      {% endif %}
+      <div class="flex gap-6 items-end justify-center">
+        <div>
+          <div class="flex flex-col items-end justify-between">
+            <p class="text-xl text-apart2">{{ trip.summary.driver_name }}</p>
+            <p>
+              {% for r in range(trip.summary.driver_rating) %}
+                ★
+              {% endfor %}
+              {% for r in range(5 - trip.summary.driver_rating) %}
+                ☆
+              {% endfor %}
+            </p>
+            <p class="text-sm">
+              {{ trip.summary.vehicle.brand }} {{ trip.summary.vehicle.model }}
+            </p>
+            <p class="text-sm">
+              {{ trip.available_seats }} pl. dispo
+            </p>
+          </div>
+        </div>
+        <div class="flex flex-col text-ground4 gap-4 items-center">
+          
+          <p>
+            <strong>{{ trip.summary.price }}€</strong>
+          </p>
+        </div>
+      </div> 
     </div>
   {% else %}
     <p>Aucun voyage trouvé.</p>
-  {% endfor %}
+    {% endfor %}
 </div>

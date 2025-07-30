@@ -3,7 +3,7 @@
     hx-post="{{ url_for('drivers.edit_driver_preferences', driver_id=current_user.id) }}"
     hx-target="#driver-preferences"
     hx-swap="outerHTML"
-    class="flex flex-col gap-4 bg-[var(--color-base2)] p-4 rounded w-full items-center"
+    class="flex flex-col gap-4 bg-ground2 p-4 rounded w-full items-center"
   >
     <p class="font-semibold">Modifier vos préférences</p>
 
@@ -21,7 +21,7 @@
       {% endfor %}
     </div>
 
-    <button type="submit" class="p-2 bg-[var(--color-base3)]">Enregistrer</button>
+    <button type="submit" class="p-2 bg-ground3">Enregistrer</button>
   </form>
 </div>
 
