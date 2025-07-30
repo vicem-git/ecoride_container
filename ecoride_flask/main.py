@@ -51,7 +51,7 @@ def create_app():
                 )
 
     except Exception as e:
-        logging.error(f"❌ Seeding error: {e}")
+        logging.error(f"DB SEED ERROR : {e}")
 
     login_manager.init_app(app)
     session_user_loader(app)
@@ -73,4 +73,4 @@ def create_app():
 app = create_app()
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)
