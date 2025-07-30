@@ -2,9 +2,7 @@ FROM fedora:latest
 
 RUN dnf install -y libpq libpq-devel
 
-RUN dnf install -y glibc-langpack-fr \
- && localedef -i fr_FR -f UTF-8 fr_FR.UTF-8
-
+RUN dnf install -y glibc-langpack-fr
 ENV LANG=fr_FR.UTF-8
 ENV LC_ALL=fr_FR.UTF-8
 
