@@ -6,7 +6,8 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='graphics/ecoride-logo.svg') }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% endblock %} - ecoRide</title>
-    <script type="module" src="http://localhost:5173/js/app.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/assets/app-Cp7cF5Cv') }}">
+    <script type="module" src="{{ url_for('static', filename='dist/assets/app-Dr1TzMnT.js') }}"></script>
     {% endblock %}
   </head>
   <body class="flex flex-col bg-ground text-contrast2 font-sans font-semibold items-center">

@@ -14,13 +14,17 @@ geopy==2.4.1
 idna==3.10
 itsdangerous==2.2.0
 Jinja2==3.1.6
+markdown-it-py==3.0.0
 MarkupSafe==3.0.2
+mdurl==0.1.2
 msgspec==0.19.0
 psycopg==3.2.9
 psycopg-pool==3.2.6
 pydantic==2.11.7
 pydantic_core==2.33.2
+Pygments==2.19.2
 python-dotenv==1.1.1
+rich==14.1.0
 typing-inspection==0.4.1
 typing_extensions==4.14.1
 tzdata==2025.2

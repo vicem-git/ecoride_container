@@ -7,4 +7,3 @@ node_modules/
 *.log
 
 compose.yaml
-app/static/dist
